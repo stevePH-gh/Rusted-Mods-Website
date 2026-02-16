@@ -1,0 +1,76 @@
+﻿@page
+@model RustedMods.Pages.FeedbackModel
+@{
+}
+
+<div class="signup-wrap">
+    <div class="signup-card">
+
+        <h2 style="text-align:center;">Feedback / Report</h2>
+
+        <form method="post" novalidate>
+
+            <div asp-validation-summary="ModelOnly" class="error"></div>
+
+            <div class="row">
+                <label class="lbl">Type</label>
+                <select asp-for="Type">
+                    <option value="" style="color: white">Select</option>
+                    <option value="Feedback">Feedback</option>
+                    <option value="Report">Report</option>
+                </select>
+                <span asp-validation-for="Type" class="error"></span>
+            </div>
+
+            <div class="row">
+                <label class="lbl">Title</label>
+                <input asp-for="Subject" type="text" placeholder="Account creation fails" />
+                <span asp-validation-for="Subject" class="error"></span>
+            </div>
+
+            <div class="row">
+                <label class="lbl">Message</label>
+                <textarea asp-for="Content" rows="6"
+                          style="resize:none;"></textarea>
+                <span asp-validation-for="Content" class="error"></span>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <button type="submit" class="primary">Send Feedback</button>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ResultMessage))
+            {
+                <p style="margin-top:10px; text-align:center; color:@(Model.IsSuccess ? "lime" : "red")">
+                    @Model.ResultMessage
+                </p>
+            }
+
+        </form>
+
+    </div>
+</div>
+
+<style>
+    textarea {
+        width: 100%;
+        background: var(--input);
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.05);
+        padding: 9px 11px;
+        font-size: 14px;
+        color: #e9eef1;
+    }
+
+    select {
+        width: 100%;
+        background: var(--input);
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.05);
+        padding: 9px 11px;
+        font-size: 14px;
+        color: black;
+    }
+</style>

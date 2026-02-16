@@ -1,0 +1,141 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+
+<div class="container1">
+
+    <div class="sideNavbar">
+
+        <div class="navBtn active" data-tip="Addons" id="btn1" onclick="showTab(1)">
+            <img src="~/images/icons/icon_addons.png" id="tab1" />
+        </div>
+
+        <div class="navBtn" data-tip="Total-Conversion" id="btn2" onclick="showTab(2)">
+            <img src="~/images/icons/icon_tc.png" id="tab2" />
+        </div>
+
+    </div>
+
+    <div class="mainDisplay">
+		<button onclick="window.location.href='@Url.Page("/Feedback")'">Feedback/Bug Report</button>
+		<button onclick="window.location.href='@Url.Page("/Confirm")'">Account Confirmation</button>
+        <div id="content1" class="tabContent activeContent"> <!-- ADDONS LIST -->
+			<h1><b>Add-ons</b></h1>
+
+            <div class="addonsList">
+                <p>INDIVIDUAL CONTENTS HERE</p>
+            </div>
+        </div>
+
+        <div id="content2" class="tabContent">  <!-- TC LIST -->
+			<h1><b>Total-Conversion</b></h1>
+
+            <div class="tcList">
+                <p>INDIVIDUAL CONTENTS HERE</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<style>
+    .container1 {
+        display: flex;
+        align-items: flex-start;
+        min-height: 100vh;
+    }
+
+    .sideNavbar {
+        width: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        padding: 15px 5px;
+    }
+
+    .navBtn {
+        width: 100px;
+        height: 60px;
+        background-color: #1a1a1a;
+        border-radius: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        position: relative;
+        transition: background .25s ease;
+        padding: 0;
+    }
+
+
+        .navBtn.active {
+            background-color: #3a3a3a;
+        }
+
+        .navBtn img {
+            width: 30px;
+            transition: transform .25s ease, filter .25s ease;
+            filter: grayscale(70%);
+            border-radius: 8px;
+        }
+
+        .navBtn:hover img {
+            transform: scale(1.2);
+            filter: grayscale(0%);
+        }
+
+        .navBtn::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: 70px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            padding: 6px 10px;
+            background: #000000cc;
+            color: #fff;
+            border-radius: 6px;
+            white-space: nowrap;
+            pointer-events: none;
+            transition: opacity .25s ease .15s;
+        }
+
+        .navBtn:hover::after {
+            opacity: 1;
+        }
+
+    .mainDisplay {
+        flex: 1;
+        padding: 25px;
+        background-color: #3a3a3a;
+        color: white;
+    }
+
+    .tabContent {
+        display: none;
+    }
+
+    .activeContent {
+        display: block;
+    }
+
+</style>
+
+
+<script>
+    function showTab(tab) {
+
+        document.querySelectorAll(".tabContent").forEach(c => c.classList.remove("activeContent"));
+
+        document.querySelectorAll(".navBtn").forEach(b => b.classList.remove("active"));
+
+        document.getElementById("content" + tab).classList.add("activeContent");
+        document.getElementById("btn" + tab).classList.add("active");
+    }
+</script>

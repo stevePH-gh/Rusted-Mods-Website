@@ -1,0 +1,345 @@
+﻿@page
+@model RustedMods.Pages.SignupModel
+@{
+}
+
+<div class="signup-wrap">
+    <div class="signup-card">
+        <h2>Sign-up</h2>
+
+        <form id="signupForm" method="post" novalidate>
+            <div asp-validation-summary="ModelOnly" class="error"></div>
+
+            <div class="row profile-row">
+                <div class="profile-controls">
+                    <input type="file" id="profileInput" accept="image/*" />
+                    <img id="profilePreview" src="~/images/user_profiles/icon_user-default.png" alt="profile preview" />
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="lbl">Email</label>
+                <input asp-for="Email" type="email" />
+                <span asp-validation-for="Email" class="error"></span>
+            </div>
+
+            <div class="row">
+                <label class="lbl">Username</label>
+                <input asp-for="Username"
+                       type="text"
+                       id="usernameInput"
+                       autocomplete="new-password" />
+                <div id="usernameStatus" class="username-status">
+                    <div class="status-circle" id="statusCircle"></div>
+                    <span class="status-text" asp-validation-for="Username" id="statusText"></span>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col">
+                    <label class="lbl">Password</label>
+                    <div class="input-with-icon">
+                        <input asp-for="Password" id="pwdInput" type="password" />
+                        <button class="icon-btn" type="button" onclick="togglePass(this)">
+                            <img src="/images/icons/icon_pass-hide.png" />
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password" class="error"></span>
+                </div>
+
+                <div class="col">
+                    <label class="lbl">Confirm Password</label>
+                    <div class="input-with-icon">
+                        <input asp-for="ConfirmPassword" id="pwdConfirmInput" type="password" />
+                        <button class="icon-btn" type="button" onclick="togglePass(this)">
+                            <img src="/images/icons/icon_pass-hide.png" />
+                        </button>
+                    </div>
+                    <span asp-validation-for="ConfirmPassword" class="error"></span>
+                </div>
+            </div>
+            <!--
+            <div class="row">
+                <label class="lbl">Socials (optional)</label>
+                <input asp-for="Socials" type="text" />
+                <span asp-validation-for="Socials" class="error"></span>
+            </div>
+            -->
+            <hr />
+            <div class="row">
+                <button type="submit" class="primary">Verify and Create</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+<div id="verifyModal" class="modal @(Model.ShowVerifyModal ? "show" : "")">
+    <div class="modal-content">
+        <h2>Verify</h2>
+        <p>You cannot Log-in yet</p>
+        <p>A confirmation email will be sent to your Inbox.</p>
+        <p>Make sure you have entered a valid email address.</p>
+        <p>After your identity is confirmed proceed to Log-in</p>
+        <button id="verifyOkBtn">Okay</button>
+    </div>
+</div>
+
+
+<style>
+    .signup-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 17px;
+    }
+
+    .signup-card {
+        width: 100%;
+        max-width: 420px;
+        background: #161616;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 22px;
+    }
+
+    .title {
+        margin: 0 0 16px 0;
+        font-size: 19px;
+        color: #fff;
+    }
+
+    .row {
+        margin-bottom: 5px;
+    }
+
+    .lbl {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 6px;
+        color: var(--muted);
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+        width: 100%;
+        background: var(--input);
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.05);
+        padding: 9px 11px;
+        font-size: 14px;
+        color: #e9eef1;
+    }
+
+    .profile-row {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .profile-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #profilePreview {
+        width: 70px;
+        height: 70px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .username-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .username-status {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+        min-height: 16px;
+    }
+
+    .status-circle {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: gray;
+    }
+
+    .status-text {
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+
+    .two-cols {
+        display: flex;
+        gap: 10px;
+    }
+
+    .col {
+        flex: 1;
+    }
+
+    .input-with-icon {
+        display: flex;
+        align-items: center;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 8px;
+        background: var(--input);
+    }
+
+        .input-with-icon input {
+            border: none;
+            flex: 1;
+            padding: 9px 11px;
+        }
+
+    .icon-btn {
+        background: none;
+        border: none;
+        padding: 0 10px;
+        cursor: pointer;
+    }
+
+        .icon-btn img {
+            width: 20px;
+        }
+
+    .primary {
+        width: 100%;
+        padding: 10px;
+        background: linear-gradient(90deg,#3ee6b7,#25b79b);
+        border: 0;
+        border-radius: 10px;
+        font-weight: 600;
+        color: #06221a;
+        cursor: pointer;
+    }
+        .primary:hover {
+            background: #2b541c;
+            color: white;
+        }
+
+    .error {
+        font-size: 12px;
+        color: red;
+        min-height: 16px;
+    }
+
+    .hint {
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+        .modal.show { /* class to show it */
+            display: flex; /* now flex centers the content */
+        }
+
+    .modal-content {
+        background: #161616;
+        color: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 400px;
+        text-align: center;
+    }
+
+        .modal-content button {
+            margin-top: 15px;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg,#3ee6b7,#25b79b);
+            color: #06221a;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+</style>
+
+
+<script>
+    function togglePass(button) {
+        const wrapper = button.closest(".input-with-icon");
+        const input = wrapper.querySelector("input");
+        const icon = button.querySelector("img");
+
+        if (!input || !icon) return;
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.src = "/images/icons/icon_pass-show.png";
+        } else {
+            input.type = "password";
+            icon.src = "/images/icons/icon_pass-hide.png";
+        }
+    }
+
+
+    const usernameInput = document.getElementById("usernameInput");
+    const usernameStatus = document.getElementById("usernameStatus");
+    const statusCircle = document.getElementById("statusCircle");
+    const statusText = document.getElementById("statusText");
+
+    function setStatus(color, text) {
+        statusCircle.style.backgroundColor = color;
+        statusText.textContent = text;
+    }
+
+    let timer;
+    usernameInput.addEventListener("input", () => {
+        clearTimeout(timer);
+
+        if (usernameInput.value.trim() === "") {
+            setStatus("gray", "Field is empty");
+            return;
+        }
+
+        setStatus("#3ea6ff", "Checking...");
+
+        timer = setTimeout(() => {
+            fetch(`/Signup?handler=CheckUsername&u=${encodeURIComponent(usernameInput.value.trim())}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.exists) {
+                        setStatus("red", "Username is taken");
+                    } else {
+                        setStatus("lime", "Available");
+                    }
+                })
+                .catch(() => {
+                    setStatus("gray", "Error checking username");
+                });
+        }, 300);
+    });
+
+    const verifyOkBtn = document.getElementById("verifyOkBtn");
+    if (verifyOkBtn) {
+        verifyOkBtn.addEventListener("click", () => {
+            window.location.href = "/Index";
+        });
+    }
+
+</script>

@@ -1,0 +1,141 @@
+﻿@{
+    var username = Context.Session.GetString("Username");
+    bool isLoggedIn = !string.IsNullOrEmpty(username);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RustedMods</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RustedMods.styles.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-md" style="background-color: #232323; padding: 10px;">
+            <div class="container d-flex justify-content-between align-items-center">
+
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-page="/Index" style="color: white;">
+                    <img src="~/images/logo.svg" style="max-width: 150px; height: auto; width: 100%;" class="img-fluid" />
+                </a>
+
+                <div class="d-flex align-items-center">
+
+                    <!-- Desktop buttons -->
+                    <div class="authButtons d-none d-md-flex align-items-center gap-2 me-3">
+                        <a asp-page="/Signup" class="btn btn-outline-light btn-sm signupBtn">Sign-up</a>
+                        @if (!isLoggedIn)
+                        {
+                            <a asp-page="/Login" class="btn btn-outline-light btn-sm loginBtn">Log-in</a>
+                        }
+                        else
+                        {
+                            <a asp-page="/Signout" class="btn btn-outline-light btn-sm">Signout</a>
+                        }
+                    </div>
+
+                    <!-- Mobile dropdown -->
+                    <div class="dropdown d-md-none me-3">
+                        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="mobileAuthDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="color:white;">
+                            Login<i class="bi bi-person-circle"></i> <!-- Optional icon -->
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileAuthDropdown">
+                            <li><a class="dropdown-item" asp-page="/Signup">Sign-up</a></li>
+                            @if (!isLoggedIn)
+                            {
+                                <li><a class="dropdown-item" asp-page="/Login">Log-in</a></li>
+                            }
+                            else
+                            {
+                                <li><a class="dropdown-item" asp-page="/Signout">Signout</a></li>
+                            }
+                        </ul>
+                    </div>
+
+                    <!-- Profile DISPLAY -->
+                    <div class="userProfile d-flex align-items-center" style="color:white; cursor:pointer;">
+                        @if (isLoggedIn)
+                        {
+                            <span class="username d-none d-md-inline ms-2"
+                                  style="font-family: 'Lato', sans-serif; font-weight: 700; margin-right: 10px;">
+                                @username
+                            </span>
+                        }
+
+                        <img src="~/images/user_profiles/icon_user-default.png" style="width:40px; height:40px; border-radius:50%;" class="img-fluid" />
+                    </div>
+
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+                    <!-- LOGIN MODAL FROM Login.cshtml -->
+
+    <div id="loginModal" class="modal @(Model is RustedMods.Pages.LoginModel m && m.ShowLoginModal ? "show" : "")">
+        <div class="modal-content signup-card" style="text-align:left;">
+            <a href="/" class="modal-close">✕</a>
+            <hr />
+
+            <h2><b>Log-in</b></h2>
+
+            <form method="post" asp-page="/Login" novalidate>
+                <div class="row">
+                    <label class="lbl">Email</label>
+                    <input type="email" name="Email" value="@(Model is RustedMods.Pages.LoginModel lm ? lm.Email : "")" />
+                    <span class="error">
+                        @if (Model is RustedMods.Pages.LoginModel lm1)
+                        {
+                            @Html.ValidationMessage("Email")
+                        }
+                    </span>
+                </div>
+
+                <div class="row">
+                    <label class="lbl">Password</label>
+                    <input type="password" name="Password" />
+                    <span class="error">
+                        @if (Model is RustedMods.Pages.LoginModel lm2)
+                        {
+                            @Html.ValidationMessage("Password")
+                        }
+                    </span>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <button type="submit" class="primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - RustedMods <!-- - <a asp-area="" asp-page="/Privacy">Privacy</a> -->
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

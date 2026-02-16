@@ -1,0 +1,246 @@
+﻿@page
+@model RustedMods.Pages.ConfirmModel
+@{
+}
+
+<div class="signup-wrap">
+    <div class="signup-card">
+
+        <h2 style="text-align:center;">Confirm Email</h2>
+
+        <form method="post" novalidate>
+
+            <div asp-validation-summary="ModelOnly" class="error"></div>
+
+            <div class="row">
+                <label class="lbl">
+                    Email
+                    <span class="hint">Re-enter your email for security</span>
+                </label>
+                <input asp-for="Email" type="email" />
+                <span asp-validation-for="Email" class="error"></span>
+            </div>
+
+            <div class="row">
+                <label class="lbl">Confirmation Code</label>
+                <input asp-for="Code" type="text" maxlength="4" />
+                <span asp-validation-for="Code" class="error"></span>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <button type="submit" class="primary">Confirm Email</button>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ResultMessage))
+            {
+                <p style="margin-top:10px; text-align:center; color:@(Model.IsSuccess ? "lime" : "red")">
+                    @Model.ResultMessage
+                </p>
+            }
+
+        </form>
+
+    </div>
+</div>
+
+<div id="verifyModal" class="modal @(Model.ShowConfirmation ? "show" : "")">
+    <div class="modal-content">
+        <h2>Email Confirmed</h2>
+        <p>You may now login</p>
+        <button id="primary" onclick="window.location.href='@Url.Page("/Index")'">Okay</button>
+    </div>
+</div>
+
+<style>
+    .signup-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 17px;
+    }
+
+    .signup-card {
+        width: 100%;
+        max-width: 420px;
+        background: #161616;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 22px;
+    }
+
+    .title {
+        margin: 0 0 16px 0;
+        font-size: 19px;
+        color: #fff;
+    }
+
+    .row {
+        margin-bottom: 5px;
+    }
+
+    .lbl {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 6px;
+        color: var(--muted);
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+        width: 100%;
+        background: var(--input);
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.05);
+        padding: 9px 11px;
+        font-size: 14px;
+        color: #e9eef1;
+    }
+
+    .profile-row {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .profile-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #profilePreview {
+        width: 70px;
+        height: 70px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .username-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .username-status {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+        min-height: 16px;
+    }
+
+    .status-circle {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: gray;
+    }
+
+    .status-text {
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+
+    .two-cols {
+        display: flex;
+        gap: 10px;
+    }
+
+    .col {
+        flex: 1;
+    }
+
+    .input-with-icon {
+        display: flex;
+        align-items: center;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 8px;
+        background: var(--input);
+    }
+
+        .input-with-icon input {
+            border: none;
+            flex: 1;
+            padding: 9px 11px;
+        }
+
+    .icon-btn {
+        background: none;
+        border: none;
+        padding: 0 10px;
+        cursor: pointer;
+    }
+
+        .icon-btn img {
+            width: 20px;
+        }
+
+    .primary {
+        width: 100%;
+        padding: 10px;
+        background: linear-gradient(90deg,#3ee6b7,#25b79b);
+        border: 0;
+        border-radius: 10px;
+        font-weight: 600;
+        color: #06221a;
+        cursor: pointer;
+    }
+
+        .primary:hover {
+            background: #2b541c;
+            color: white;
+        }
+
+    .error {
+        font-size: 12px;
+        color: red;
+        min-height: 16px;
+    }
+
+    .hint {
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+        .modal.show { /* class to show it */
+            display: flex; /* now flex centers the content */
+        }
+
+    .modal-content {
+        background: #161616;
+        color: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 400px;
+        text-align: center;
+    }
+
+        .modal-content button {
+            margin-top: 15px;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg,#3ee6b7,#25b79b);
+            color: #06221a;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+</style>
